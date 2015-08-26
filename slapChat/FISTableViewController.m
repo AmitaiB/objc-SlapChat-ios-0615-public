@@ -11,6 +11,7 @@
 #import "Message.h"
 
 @interface FISTableViewController ()
+- (IBAction)sortByDateButtonTapped:(id)sender;
 
 @property (nonatomic, strong) FISDataStore *dataManager;
 
@@ -104,6 +105,14 @@
     return cell;
 }
 
+- (IBAction)sortByDateButtonTapped:(id)sender {
+    NSSortDescriptor *byDate = [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO];
+    NSSortDescriptor *byText = [NSSortDescriptor sortDescriptorWithKey:@"content"   ascending:YES];
+
+    self.messages = [self.messages sortedArrayUsingDescriptors:@[byDate, byText]];
+    
+    [self.tableView reloadData];
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -153,5 +162,6 @@
     // Pass the selected object to the new view controller.
 }
 */
+
 
 @end
