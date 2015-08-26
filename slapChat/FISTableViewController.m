@@ -7,23 +7,16 @@
 //
 
 #import "FISTableViewController.h"
+#import "FISDataStore.h"
+#import "Message.h"
 
 @interface FISTableViewController ()
 
-@property (nonatomic, strong) NSArray *messages;
+@property (nonatomic, strong) FISDataStore *dataManager;
 
 @end
 
 @implementation FISTableViewController
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -34,6 +27,30 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    
+    self.dataManager = [FISDataStore sharedDataStore];
+    
+    Message *message1 = [NSEntityDescription insertNewObjectForEntityForName:@"Message"
+                                                      inManagedObjectContext:self.dataManager.managedObjectContext];
+    
+    Message *message2 = [NSEntityDescription insertNewObjectForEntityForName:@"Message"
+                                                      inManagedObjectContext:self.dataManager.managedObjectContext];
+    
+    Message *message3 = [NSEntityDescription insertNewObjectForEntityForName:@"Message"
+                                                      inManagedObjectContext:self.dataManager.managedObjectContext];
+    
+    message1.content = @"Brownian movie-ing: when a huge gap in plausibility is made digestible by breaking it down into parts small enough that each chunk only asks for a small suspension of disbelief";
+    message1.createdAt = [NSDate date];
+    
+    message2.content = @"So I’m finally going back to tackle CoreData, a monster growing bigger in my imagination with each day that I found good reasons to avoid it. I couldn’t pretend to have better things to do after a picture of CoreData was captured by the Insecurity app - clearly CoreData was making me feel insecure. So I do what I always do in these situations: I ask myself “What would Batman do?” Batman would dress up as CoreData and make a lair in a SQLite DB, that’s what! So I start 3 things at once (ADHD, yeah!): sample project, lab/video, and jumping on the hyperlinked-hamster-wheel that are The Docs.\n`tl;dr` And that’s when, after about half an hour, I had a funny, backwards thought: “Wow, I know 80% of this stuff already!: CoreData is just like Parse!” Those Apple copycats. :stuck_out_tongue_winking_eye:\"";
+    message2.createdAt = [NSDate date];
+    
+    message3.content = @"I'm glad it all worked out --Future You";
+    message3.createdAt = [NSDate distantFuture];
+    
+        //Save the context.
+    [self.dataManager saveContext];
 }
 
 - (void)didReceiveMemoryWarning
