@@ -27,10 +27,25 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    
     self.dataManager = [FISDataStore sharedDataStore];
+
     
+    BOOL isFirstRun = YES;
+    isFirstRun = NO;
+    
+        // Step 6. Display the contents of each message in the textLabel.text of each cell.
+    NSFetchRequest *fetchMessage = [NSFetchRequest fetchRequestWithEntityName:@"Message"];
+    NSError *error = nil;
+        //Initial dummy data management.
+    if (isFirstRun) {
+        [self setupDummyData];
+    }
+    
+
+    self.messages = [self.dataManager.managedObjectContext executeFetchRequest:fetchMessage error:&error];
+}
+
+-(void)setupDummyData {
     Message *message1 = [NSEntityDescription insertNewObjectForEntityForName:@"Message"
                                                       inManagedObjectContext:self.dataManager.managedObjectContext];
     
@@ -52,6 +67,7 @@
         //Save the context.
     [self.dataManager saveContext];
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -81,7 +97,8 @@
     // Configure the cell...
     
     if (self.messages[indexPath.row]) {
-        cell.textLabel.text = self.messages[indexPath.row];
+        Message *message = self.messages[indexPath.row];
+        cell.textLabel.text = message.content;
     }
     
     return cell;
